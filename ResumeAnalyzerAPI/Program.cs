@@ -1,4 +1,8 @@
 using ResumeAnalyzerAPI.Services;
+using DotNetEnv;
+
+// ✅ LOAD ENV FIRST (VERY IMPORTANT)
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,11 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddScoped<IGeminiService, GeminiService>();
-// ✅ IMPORTANT
 builder.Services.AddScoped<IResumeService, ResumeService>();
 
-// CORS (if already added keep it)
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",

@@ -16,8 +16,12 @@ namespace ResumeAnalyzerAPI.Services
         {
             _httpClient = new HttpClient();
 
-            _apiKey = config["Gemini:ApiKey"]
-                ?? throw new System.Exception("Gemini API Key missing");
+            _apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
+
+            if (string.IsNullOrEmpty(_apiKey))
+            {
+                throw new Exception("Gemini API Key not set in environment variables");
+            }
 
             _model = config["Gemini:Model"]
                 ?? "models/gemini-1.5-flash";
