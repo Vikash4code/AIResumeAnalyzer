@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ResumeAnalyzerAPI.DTOs;
+using ResumeAnalyzerAPI.Services;
+using System.Threading.Tasks;
 
 namespace ResumeAnalyzerAPI.Controllers
 {
@@ -7,6 +9,13 @@ namespace ResumeAnalyzerAPI.Controllers
     [Route("api/[controller]")]
     public class ResumeController : ControllerBase
     {
+        private readonly IResumeService _resumeService;
+
+        public ResumeController(IResumeService resumeService)
+        {
+            _resumeService = resumeService;
+        }
+
         [HttpGet("test")]
         public IActionResult Test()
         {
@@ -14,23 +23,22 @@ namespace ResumeAnalyzerAPI.Controllers
         }
 
         [HttpPost("analyze")]
-        public IActionResult Analyze([FromForm] ResumeRequestDTO request)
+        public async Task<IActionResult> AnalyzeResume([FromForm] ResumeRequestDTO request)
         {
-            // Dummy response (real logic later)
-            var response = new ResumeResponseDTO
+            if (request.File == null || string.IsNullOrEmpty(request.JobRole))
             {
-                Score = 85,
-                MatchedSkills = new List<string> { "Java", "SQL" },
-                MissingSkills = new List<string> { "Docker", "AWS" },
-                Suggestions = new List<string>
-                {
-                    "Add cloud projects",
-                    "Improve project descriptions"
-                },
-                SummaryFeedback = "Good resume but needs improvement"
-            };
+                return BadRequest("File and JobRole are required");
+            }
 
-            return Ok(response);
+            var result = await _resumeService.AnalyzeResumeAsync(request.File, request.JobRole);
+            return Ok(result);
+        }
+
+        [HttpGet("models")]
+        public async Task<IActionResult> GetModels([FromServices] IGeminiService gemini)
+        {
+            var models = await gemini.ListModelsAsync();
+            return Ok(models);
         }
     }
 }
