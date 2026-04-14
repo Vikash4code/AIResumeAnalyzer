@@ -47,8 +47,8 @@ function App() {
                     onClick={handleAnalyze}
                     disabled={loading}
                     className={`w-full py-3 rounded-xl text-white font-medium transition ${loading
-                            ? "bg-gray-400 cursor-not-allowed"
-                            : "bg-blue-600 hover:bg-blue-700"
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-blue-600 hover:bg-blue-700"
                         }`}
                 >
                     {loading ? "Analyzing..." : "Analyze Resume"}
