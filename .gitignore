@@ -7,5 +7,6 @@ obj/
 .DS_Store
 Thumbs.db
 node_modules/
-dist/
+dist
+appsettings.Development.json
 .env

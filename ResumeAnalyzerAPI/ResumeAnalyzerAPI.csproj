@@ -19,5 +19,4 @@
     <Folder Include="Data\" />
     <Folder Include="Helpers\" />
   </ItemGroup>
-
 </Project>
